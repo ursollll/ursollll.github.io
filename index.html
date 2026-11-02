@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>给我试试吧 · AI 宠物换装间</title>
+<meta name="description" content="天气冷了，选一只你喜欢的给它保温。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23F7DCD6'/%3E%3Cg fill='%238E5C36'%3E%3Cellipse cx='16' cy='20' rx='6' ry='4.6' opacity='.9'/%3E%3Cellipse cx='8' cy='14' rx='2.6' ry='3.3' opacity='.75'/%3E%3Cellipse cx='24' cy='14' rx='2.6' ry='3.3' opacity='.75'/%3E%3Cellipse cx='12' cy='9.4' rx='2.3' ry='3' opacity='.6'/%3E%3Cellipse cx='20' cy='9.4' rx='2.3' ry='3' opacity='.6'/%3E%3C/g%3E%3C/svg%3E">
+<style>
+/* ============ 基础 ============ */
+:root{
+  --cream:#FCF8F2;
+  --cream-2:#F6EEE2;
+  --cream-3:#EFE3D3;
+  --ink:#2C2320;
+  --ink-2:#6E5E53;
+  --ink-3:#9C8B7E;
+  --caramel:#B57A4E;
+  --caramel-d:#8E5C36;
+  --pink:#F4CFD3;
+  --pink-2:#E3A0A9;
+  --line:rgba(92,66,46,.12);
+  --line-2:rgba(92,66,46,.07);
+  --r-lg:28px;
+  --r-md:18px;
+  --shadow:0 26px 64px -32px rgba(94,63,40,.42);
+  --serif:"Songti SC","Noto Serif SC","Source Han Serif SC","STSong",serif;
+  --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+[id]{scroll-margin-top:88px}
+body{
+  font-family:var(--sans);
+  color:var(--ink);
+  background:
+    radial-gradient(1100px 720px at 84% -8%, #FBE6E3 0%, rgba(251,230,227,0) 62%),
+    radial-gradient(880px 620px at 2% 4%, #F8F0DF 0%, rgba(248,240,223,0) 58%),
+    var(--cream);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+  line-height:1.65;
+  overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.35;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
+}
+img{display:block;max-width:100%}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit}
+a{color:inherit;text-decoration:none}
+::selection{background:var(--pink);color:var(--ink)}
+
+.wrap{max-width:1220px;margin:0 auto;padding:0 32px;position:relative;z-index:1}
+
+/* ============ 顶栏 ============ */
+.nav{
+  position:sticky;top:0;z-index:60;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  background:rgba(252,248,242,.72);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s, background .3s;
+}
+.nav.solid{border-bottom-color:var(--line-2);background:rgba(252,248,242,.9)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;height:70px}
+.brand{display:flex;align-items:center;gap:11px}
+.brand-mark{
+  width:34px;height:34px;border-radius:11px;display:grid;place-items:center;
+  background:linear-gradient(150deg,#F7DCD6,#EEC7C0);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.9), 0 4px 12px -6px rgba(142,92,54,.5);
+}
+.brand-name{font-family:var(--serif);font-size:18.5px;letter-spacing:.06em;font-weight:600}
+.brand-sub{font-size:10px;letter-spacing:.14em;color:var(--ink-3);margin-top:-2px}
+.nav-links{display:flex;align-items:center;gap:30px;font-size:13.5px;color:var(--ink-2)}
+.nav-links a{position:relative;padding:4px 0;transition:color .2s}
+.nav-links a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--caramel);transition:width .3s;
+}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a:hover::after{width:100%}
+.nav-badge{
+  display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:6px 12px;border-radius:100px;
+  border:1px solid var(--line);color:var(--caramel-d);background:rgba(255,255,255,.6);
+}
+.dot{width:5px;height:5px;border-radius:50%;background:#7FB08A;box-shadow:0 0 0 3px rgba(127,176,138,.18)}
+
+/* ============ Hero ============ */
+.hero{padding:62px 0 34px;max-width:740px}
+.eyebrow{
+  display:flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--ink-3);margin-bottom:26px;
+}
+.eyebrow span.line{width:44px;height:1px;background:var(--line);display:block}
+h1{
+  font-family:var(--serif);font-weight:600;font-size:clamp(36px,4.9vw,60px);
+  line-height:1.14;letter-spacing:.01em;
+}
+h1 em{font-style:normal;position:relative;white-space:nowrap}
+h1 em svg{position:absolute;left:0;right:0;bottom:-8px;width:100%;height:14px;overflow:visible}
+.lede{margin-top:24px;font-size:16px;color:var(--ink-2);max-width:520px}
+
+/* ============ 工作台 ============ */
+.studio{
+  display:grid;grid-template-columns:minmax(0,1fr) 396px;gap:34px;
+  align-items:start;padding-bottom:20px;
+}
+.stage-col{position:sticky;top:96px}
+
+.stage{
+  background:linear-gradient(160deg,#FBF5EC 0%,#F7EFE3 55%,#F9F3E9 100%);
+  border-radius:var(--r-lg);padding:10px 10px 6px;
+  box-shadow:var(--shadow);
+  border:1px solid rgba(255,255,255,.9);
+}
+.media{
+  position:relative;border-radius:21px;overflow:hidden;
+  background:var(--cream-2);
+  aspect-ratio:var(--ar,1.08);
+  transition:aspect-ratio .35s ease;
+  touch-action:pan-y;
+  max-height:84vh;
+  margin:0 auto;
+  cursor:default;
+  box-shadow:0 12px 34px -22px rgba(94,63,40,.55), 0 0 0 1px rgba(255,255,255,.7);
+}
+.media.compare-on{cursor:ew-resize}
+.media:focus-visible{outline:2px solid var(--caramel);outline-offset:4px}
+.media:focus:not(:focus-visible){outline:none}
+.media img.layer{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;
+  user-select:none;-webkit-user-drag:none;z-index:1;
+}
+.after-wrap{position:absolute;inset:0;clip-path:inset(0 0 0 0);will-change:clip-path;pointer-events:none;z-index:2}
+.after-wrap img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center;
+  user-select:none;-webkit-user-drag:none;
+}
+
+.chip{
+  position:absolute;z-index:3;top:14px;display:inline-flex;align-items:center;gap:7px;
+  padding:7px 13px;border-radius:100px;font-size:12px;letter-spacing:.03em;
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(255,255,255,.9);color:var(--ink-2);
+  box-shadow:0 6px 18px -12px rgba(94,63,40,.6);
+  transition:opacity .3s, transform .3s;
+}
+.chip.left{left:14px}
+.chip.right{right:14px;color:var(--caramel-d);font-weight:500}
+.chip .mini-dot{width:5px;height:5px;border-radius:50%;background:var(--pink-2)}
+
+.cmp-line{
+  position:absolute;z-index:4;top:0;bottom:0;left:50%;width:2px;background:rgba(255,255,255,.95);
+  box-shadow:0 0 0 1px rgba(94,63,40,.18), 0 0 22px rgba(0,0,0,.25);
+  opacity:0;transition:opacity .25s;pointer-events:none;transform:translateX(-1px);
+}
+.cmp-knob{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,.95);
+  display:grid;place-items:center;color:var(--caramel-d);
+  box-shadow:0 8px 22px -8px rgba(94,63,40,.7), 0 0 0 1px rgba(94,63,40,.1);
+}
+.cmp-on .cmp-line{opacity:1}
+.cmp-labels{
+  position:absolute;z-index:4;bottom:14px;left:14px;right:14px;display:flex;justify-content:space-between;
+  font-size:11.5px;color:#fff;letter-spacing:.08em;opacity:0;transition:opacity .25s;
+  text-shadow:0 1px 6px rgba(0,0,0,.55);pointer-events:none;
+}
+.cmp-on .cmp-labels{opacity:1}
+
+/* 生成中遮罩 */
+.loader{
+  position:absolute;z-index:6;inset:0;display:grid;place-items:center;gap:0;
+  background:rgba(252,248,242,.86);backdrop-filter:blur(10px);
+  opacity:0;pointer-events:none;transition:opacity .35s;
+}
+.loader.on{opacity:1;pointer-events:auto}
+.loader-in{display:flex;flex-direction:column;align-items:center;gap:20px}
+.ring{
+  width:66px;height:66px;border-radius:50%;position:relative;
+  border:1.5px dashed rgba(181,122,78,.35);
+  animation:spin 3.4s linear infinite;
+}
+.ring::before{
+  content:"";position:absolute;inset:9px;border-radius:50%;
+  border:1.5px solid rgba(181,122,78,.16);
+}
+.ring::after{
+  content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;margin-left:-4px;
+  border-radius:50%;background:var(--caramel);
+  box-shadow:0 0 0 4px rgba(181,122,78,.15);
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-txt{font-size:13px;letter-spacing:.14em;color:var(--ink-2);min-height:20px}
+.loader-bar{width:150px;height:2px;background:var(--cream-3);border-radius:2px;overflow:hidden}
+.loader-bar i{display:block;height:100%;width:40%;background:var(--caramel);border-radius:2px;animation:sweep 1.5s cubic-bezier(.4,0,.2,1) infinite}
+@keyframes sweep{0%{transform:translateX(-100%)}100%{transform:translateX(360%)}}
+
+/* 舞台信息条 */
+.stage-info{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 14px 12px}
+.si-title{font-family:var(--serif);font-size:19px;font-weight:600;letter-spacing:.02em}
+.si-meta{font-size:12px;color:var(--ink-3);letter-spacing:.1em;margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage-info > div:first-child{min-width:0}
+.si-actions{display:flex;gap:8px;flex-shrink:0;opacity:0;pointer-events:none;transition:opacity .35s}
+.si-actions.active{opacity:1;pointer-events:auto}
+.icon-btn{
+  display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:100px;
+  font-size:12.5px;color:var(--ink-2);border:1px solid var(--line);
+  background:rgba(255,255,255,.7);transition:.22s;white-space:nowrap;flex-shrink:0;
+}
+.icon-btn:hover{color:var(--ink);border-color:rgba(142,92,54,.32);background:#fff;transform:translateY(-1px)}
+.icon-btn[disabled]{opacity:.4;pointer-events:none}
+.icon-btn.active{background:var(--ink);color:#fff;border-color:var(--ink)}
+
+/* ============ 右侧面板 ============ */
+.panel{
+  background:rgba(255,255,255,.72);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:26px;padding:8px 22px 22px;
+  box-shadow:0 22px 56px -40px rgba(94,63,40,.55);
+  backdrop-filter:blur(10px);
+}
+.block{padding:20px 0}
+.block + .block{border-top:1px solid var(--line-2)}
+.block-head{display:flex;align-items:baseline;gap:10px;margin-bottom:14px}
+.block-num{font-size:10.5px;letter-spacing:.18em;color:var(--caramel);font-variant-numeric:tabular-nums}
+.block-title{font-size:14px;font-weight:600;letter-spacing:.06em}
+.block-note{margin-left:auto;font-size:11.5px;color:var(--ink-3)}
+
+.animal-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.animal{
+  position:relative;border-radius:15px;overflow:hidden;background:var(--cream-2);
+  aspect-ratio:1;transition:.28s cubic-bezier(.2,.7,.3,1);
+  outline:1px solid transparent;
+}
+.animal img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+.animal .a-name{
+  position:absolute;left:0;right:0;bottom:0;padding:26px 8px 9px;
+  font-size:11.5px;color:#fff;letter-spacing:.02em;text-align:center;
+  background:linear-gradient(to top, rgba(30,22,18,.86) 0%, rgba(30,22,18,.55) 48%, rgba(30,22,18,0) 100%);
+  text-shadow:0 1px 4px rgba(0,0,0,.35);
+  transition:.25s;
+}
+.animal:hover img{transform:scale(1.06)}
+.animal:hover{transform:translateY(-2px)}
+.animal.on{outline:2px solid var(--caramel);outline-offset:2px}
+.animal .tick{
+  position:absolute;top:7px;right:7px;width:18px;height:18px;border-radius:50%;
+  background:var(--caramel);color:#fff;display:grid;place-items:center;
+  opacity:0;transform:scale(.6);transition:.25s;
+}
+.animal.on .tick{opacity:1;transform:scale(1)}
+.animal .re-up{
+  position:absolute;top:7px;left:7px;z-index:3;
+  font-size:10px;letter-spacing:.04em;color:#fff;background:rgba(30,22,18,.62);
+  padding:3px 8px;border-radius:100px;line-height:1.5;transition:.2s;
+}
+.animal .re-up:hover{background:rgba(30,22,18,.85)}
+.up-animal{aspect-ratio:1}
+
+.look-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.look{
+  position:relative;border-radius:15px;overflow:hidden;background:#fff;
+  border:1px solid var(--line-2);text-align:left;transition:.28s cubic-bezier(.2,.7,.3,1);
+}
+.look .l-img{aspect-ratio:1;overflow:hidden;background:var(--cream-2)}
+.look .l-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+.look .l-txt{padding:9px 11px 11px}
+.look .l-idx{font-size:10px;letter-spacing:.16em;color:var(--ink-3);text-transform:uppercase}
+.look .l-name{font-size:12.5px;margin-top:2px;letter-spacing:.01em}
+.look:hover{transform:translateY(-2px);box-shadow:0 14px 30px -22px rgba(94,63,40,.7);border-color:var(--line)}
+.look:hover .l-img img{transform:scale(1.05)}
+.look.on{border-color:var(--caramel);box-shadow:0 0 0 2px rgba(181,122,78,.15), 0 14px 30px -24px rgba(94,63,40,.7)}
+.look.on .l-idx{color:var(--caramel)}
+.look .badge{
+  position:absolute;top:8px;left:8px;font-size:9.5px;letter-spacing:.1em;
+  padding:3px 7px;border-radius:100px;background:rgba(44,35,32,.72);color:#fff;
+}
+
+.upload{
+  border:1.5px dashed rgba(142,92,54,.28);border-radius:15px;background:rgba(255,255,255,.5);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  aspect-ratio:1; transition:.25s; color:var(--ink-3);font-size:12px;
+}
+.upload:hover{border-color:var(--caramel);background:rgba(246,238,226,.7);color:var(--caramel-d)}
+.upload svg{opacity:.8}
+.upload small{font-size:10px;letter-spacing:.06em;opacity:.75}
+.upload.drag{background:#fff;border-color:var(--caramel);transform:scale(1.02)}
+
+.cta{
+  width:100%;height:54px;border-radius:16px;margin-top:18px;
+  background:linear-gradient(160deg,#3A2D26,#241B17);color:#FCF8F2;
+  font-size:14px;letter-spacing:.08em;font-weight:500;
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  box-shadow:0 16px 34px -20px rgba(44,35,32,.85);
+  transition:.25s cubic-bezier(.2,.7,.3,1);
+  position:relative;overflow:hidden;
+}
+.cta:hover{transform:translateY(-2px);box-shadow:0 22px 42px -22px rgba(44,35,32,.9)}
+.cta:active{transform:translateY(0) scale(.995)}
+.cta[disabled]{opacity:.35;pointer-events:none}
+.cta .spark{opacity:.9}
+.hint{font-size:11.5px;color:var(--ink-3);text-align:center;margin-top:11px;letter-spacing:.02em}
+
+/* ============ Footer ============ */
+footer{margin-top:90px;border-top:1px solid var(--line)}
+.foot-in{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:30px 0 46px;flex-wrap:wrap}
+.foot-l{font-size:12px;color:var(--ink-3);letter-spacing:.04em}
+.foot-r{font-size:11.5px;color:var(--ink-3);display:flex;gap:18px;flex-wrap:wrap}
+
+/* ============ Toast ============ */
+.toast{
+  position:fixed;left:50%;bottom:34px;transform:translate(-50%,20px);
+  background:rgba(38,29,25,.94);color:#FCF8F2;font-size:13px;letter-spacing:.04em;
+  padding:12px 20px;border-radius:100px;z-index:200;opacity:0;pointer-events:none;
+  transition:.35s cubic-bezier(.2,.7,.3,1);backdrop-filter:blur(8px);
+  box-shadow:0 18px 40px -18px rgba(0,0,0,.6);
+  display:flex;align-items:center;gap:9px;
+  max-width:calc(100vw - 36px);text-align:center;
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+
+/* ============ 弹窗 ============ */
+.modal{
+  position:fixed;inset:0;z-index:180;display:grid;place-items:center;padding:24px;
+  background:rgba(44,35,32,.34);backdrop-filter:blur(6px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.modal.on{opacity:1;pointer-events:auto}
+.modal-card{
+  width:min(560px,100%);background:var(--cream);border-radius:26px;padding:28px;
+  box-shadow:0 40px 90px -40px rgba(0,0,0,.5);
+  transform:translateY(14px) scale(.985);transition:.35s cubic-bezier(.2,.7,.3,1);
+  max-height:88vh;overflow:auto;
+}
+.modal.on .modal-card{transform:none}
+.m-title{font-family:var(--serif);font-size:23px;font-weight:600;letter-spacing:.02em}
+.m-sub{font-size:13px;color:var(--ink-2);margin-top:10px;line-height:1.75}
+.m-pair{display:flex;gap:12px;margin:20px 0 6px}
+.m-pair figure{flex:1;border-radius:14px;overflow:hidden;background:var(--cream-2);position:relative}
+.m-pair img{width:100%;aspect-ratio:1;object-fit:cover}
+.m-pair figcaption{
+  position:absolute;left:8px;bottom:8px;font-size:10px;letter-spacing:.1em;
+  background:rgba(255,255,255,.86);padding:3px 8px;border-radius:100px;color:var(--ink-2);
+}
+.m-label{font-size:11px;letter-spacing:.16em;color:var(--ink-3);margin:20px 0 8px;text-transform:uppercase}
+.m-prompt{
+  width:100%;min-height:168px;resize:vertical;border:1px solid var(--line);border-radius:14px;
+  padding:14px;font-family:var(--sans);font-size:12.5px;line-height:1.75;color:var(--ink-2);
+  background:#fff;outline:none;transition:.2s;
+}
+.m-prompt:focus{border-color:rgba(181,122,78,.5);box-shadow:0 0 0 3px rgba(181,122,78,.1)}
+.m-actions{display:flex;gap:10px;margin-top:18px}
+.btn-primary{
+  flex:1;height:46px;border-radius:13px;background:var(--ink);color:var(--cream);
+  font-size:13px;letter-spacing:.06em;display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;
+}
+.btn-primary:hover{transform:translateY(-1px)}
+.btn-ghost{
+  height:46px;padding:0 18px;border-radius:13px;border:1px solid var(--line);
+  font-size:13px;color:var(--ink-2);display:flex;align-items:center;justify-content:center;gap:8px;transition:.2s;background:#fff;
+}
+.btn-ghost:hover{border-color:rgba(142,92,54,.3);color:var(--ink)}
+.m-foot{font-size:11.5px;color:var(--ink-3);margin-top:14px;line-height:1.7}
+.m-foot code{background:var(--cream-2);padding:1px 5px;border-radius:4px;font-size:11px}
+
+/* ============ 响应式 ============ */
+@media (max-width:1020px){
+  .studio{grid-template-columns:1fr;gap:26px}
+  .stage-col{position:static}
+}
+@media (max-width:720px){
+  .wrap{padding:0 18px}
+  .hero{padding:52px 0 32px}
+  .nav-links{display:none}
+  .panel{padding:8px 16px 18px}
+  .media{max-height:58vh}
+  .foot-in{flex-direction:column;align-items:flex-start}
+  .cmp-knob{width:38px;height:38px}
+  .icon-btn{height:34px;padding:0 11px;font-size:12px}
+  .si-title{font-size:17px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+}
+</style>
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top">
+      <span class="brand-mark">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none">
+          <path d="M12 13.5c2.2 0 4 1.5 4 3.2 0 1.4-1.3 2.3-4 2.3s-4-.9-4-2.3c0-1.7 1.8-3.2 4-3.2Z" fill="#8E5C36" opacity=".85"/>
+          <ellipse cx="6.2" cy="10.4" rx="2.1" ry="2.7" transform="rotate(-16 6.2 10.4)" fill="#8E5C36" opacity=".7"/>
+          <ellipse cx="17.8" cy="10.4" rx="2.1" ry="2.7" transform="rotate(16 17.8 10.4)" fill="#8E5C36" opacity=".7"/>
+          <ellipse cx="9.1" cy="6.5" rx="1.9" ry="2.5" transform="rotate(-8 9.1 6.5)" fill="#8E5C36" opacity=".55"/>
+          <ellipse cx="14.9" cy="6.5" rx="1.9" ry="2.5" transform="rotate(8 14.9 6.5)" fill="#8E5C36" opacity=".55"/>
+        </svg>
+      </span>
+      <span>
+        <span class="brand-name">给我试试吧</span>
+        <span class="brand-sub">Dress me up！</span>
+      </span>
+    </a>
+    <nav class="nav-links">
+      <a href="#studio">换装间</a>
+      <span class="nav-badge"><i class="dot"></i> AI 换装</span>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap">
+    <section class="hero">
+      <p class="eyebrow"><span class="line"></span>Pet Dress-up Atelier · AI 换装</p>
+      <h1>给毛孩子，<br>换一身<em>新衣裳<svg viewBox="0 0 200 14" preserveAspectRatio="none"><path d="M2 9c34-6 68-7 98-4 30 3 58 1 98-3" stroke="#E3A0A9" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/></svg></em>。</h1>
+      <p class="lede">天气冷了，选一只你喜欢的给它保温</p>
+    </section>
+
+    <section class="studio" id="studio">
+      <!-- 舞台 -->
+      <div class="stage-col">
+        <div class="stage">
+          <div class="media" id="media" aria-label="换装预览" tabindex="0">
+            <img class="layer" id="imgBase" alt="">
+            <div class="after-wrap" id="afterWrap"><img id="imgAfter" alt=""></div>
+
+            <span class="chip left" id="chipAnimal"><i class="mini-dot"></i><span id="chipAnimalTxt">局促的萌物</span></span>
+            <span class="chip right" id="chipAi">AI 换装</span>
+
+            <div class="cmp-line" id="cmpLine">
+              <span class="cmp-knob">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 6 4 12l5 6M15 6l5 6-5 6"/>
+                </svg>
+              </span>
+            </div>
+            <div class="cmp-labels"><span>换装后</span><span>原图</span></div>
+
+            <div class="loader" id="loader">
+              <div class="loader-in">
+                <div class="ring"></div>
+                <div class="loader-txt" id="loaderTxt">正在量体裁衣…</div>
+                <div class="loader-bar"><i></i></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-info">
+            <div>
+              <div class="si-title" id="siTitle">局促的萌物</div>
+              <div class="si-meta" id="siMeta">还未换装 · 先挑一套衣服</div>
+            </div>
+            <div class="si-actions">
+              <button class="icon-btn" id="btnCompare" disabled>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M12 3v18M5 8l-3 4 3 4M19 8l3 4-3 4"/></svg>
+                对比
+              </button>
+              <button class="icon-btn" id="btnSave" disabled>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4m0 12-4-4m4 4 4-4M4 18v2h16v-2"/></svg>
+                保存
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 控制面板 -->
+      <aside class="panel">
+        <div class="block">
+          <div class="block-head">
+            <span class="block-num">01</span>
+            <span class="block-title">选一只萌物</span>
+            <span class="block-note" id="animalNote">3 位住客</span>
+          </div>
+          <div class="animal-grid" id="animalGrid"></div>
+          <input type="file" id="fileAnimal" accept="image/*" hidden>
+        </div>
+
+        <div class="block">
+          <div class="block-head">
+            <span class="block-num">02</span>
+            <span class="block-title">挑一套衣服</span>
+            <span class="block-note" id="lookNote">衣橱 3 件</span>
+          </div>
+          <div class="look-grid" id="lookGrid"></div>
+          <input type="file" id="fileLook" accept="image/*" hidden>
+          <input type="file" id="fileResult" accept="image/*" hidden>
+        </div>
+
+        <button class="cta" id="btnGenerate">
+          <span id="ctaTxt">让「局促的萌物」穿上 look 01</span>
+          <svg class="spark" width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.6 5.6L19 9.2l-5.4 1.6L12 16.4l-1.6-5.6L5 9.2l5.4-1.6L12 2Z" opacity=".9"/></svg>
+        </button>
+        <p class="hint" id="hint">生成约 2 秒 · 出图后可拖动对比前后</p>
+      </aside>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot-in">
+    <div class="foot-l">给我试试吧 · 一个用 AI 做的小实验</div>
+    <div class="foot-r">
+      <span>换装效果图由 AI 生成</span>
+      <span>服装与动物照片版权归原作者</span>
+    </div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- 自定义服装：生成指令弹窗 -->
+<div class="modal" id="modal">
+  <div class="modal-card">
+    <h3 class="m-title" id="mTitle">这套衣服，得现场缝一针</h3>
+    <p class="m-sub" id="mSub">你上传的服装还没有换装结果。这里已经替你写好了一段生成指令——把它和下面两张图一起交给 WorkBuddy（或任意支持图片编辑的 AI），就能拿到真实效果。</p>
+
+    <div class="m-pair">
+      <figure><img id="mAnimal" alt=""><figcaption>① 萌物</figcaption></figure>
+      <figure><img id="mLook" alt=""><figcaption>② 服装</figcaption></figure>
+    </div>
+
+    <div class="m-label">生成指令</div>
+    <textarea class="m-prompt" id="mPrompt" spellcheck="false"></textarea>
+
+    <div class="m-actions">
+      <button class="btn-primary" id="btnCopy">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>
+        复制指令
+      </button>
+      <button class="btn-ghost" id="btnHaveResult">我有结果了</button>
+    </div>
+    <p class="m-foot" id="mFoot">拿到效果图后，点「我有结果了」把它传进来，就能在这个舞台上看前后对比。<br>文件命名 <code>assets/results/动物-服装.jpg</code> 放好，下次打开还在。</p>
+  </div>
+</div>
+
+<script>
+/* ==================== 数据 ==================== */
+const ANIMALS = {
+  elephant: {
+    name: "局促的萌物",
+    species: "亚洲小象 · 一岁半",
+    tag: "The Bashful One",
+    desc: "站着不敢动的那种乖。粉蝴蝶结是家里给戴的，从来没自己摘下来过。",
+    traits: ["腼腆", "一紧张就原地不动", "怕生"],
+    promptName: "戴粉色蝴蝶结的小亚洲象",
+    thumb: "assets/animals/elephant-thumb.jpg",
+    full: "assets/animals/elephant.jpg",
+    ar: "1000 / 925"
+  },
+  cat: {
+    name: "庄严的萌物",
+    species: "英国短毛猫 · 四岁",
+    tag: "The Dignified One",
+    desc: "猫界董事长。坐姿八小时不塌腰，看谁都像在审你的报销单。",
+    traits: ["沉稳", "威严", "拒绝被抱"],
+    promptName: "灰色英国短毛猫",
+    thumb: "assets/animals/cat-thumb.jpg",
+    full: "assets/animals/cat.jpg",
+    ar: "841 / 1200"
+  },
+  shiba: {
+    name: "悠闲的萌物",
+    species: "柴犬 · 三岁",
+    tag: "The Unbothered One",
+    desc: "躺平特级选手。牵引绳拉成一根直线，它还能笑出声来。",
+    traits: ["悠哉", "爱笑", "拒绝起身"],
+    promptName: "趴在地砖上的柴犬",
+    thumb: "assets/animals/shiba-thumb.jpg",
+    full: "assets/animals/shiba.jpg",
+    ar: "841 / 1148"
+  }
+};
+
+const LOOKS = {
+  look1: {
+    name: "粉格子小背心",
+    idx: "look 01",
+    thumb: "assets/looks/look1-thumb.jpg",
+    desc: "红棕格纹打底，手绘小狗在格子里乱跑，深棕滚边收口。日常款里最不费力的那件。",
+    key: "浅粉色格纹 + 手绘小狗印花 + 深棕色滚边 + 圆领",
+    promptLook: "浅粉色格纹宠物背心，上面印着手绘风格的小狗图案，深棕色包边和圆领"
+  },
+  look2: {
+    name: "星星蕾丝背心",
+    idx: "look 02",
+    thumb: "assets/looks/look2-thumb.jpg",
+    desc: "奶油底上撒了一把彩色小星星，领口一圈白蕾丝。软得像睡衣，穿上就想睡。",
+    key: "米白色底 + 彩色星星印花 + 浅粉包边 + 白色蕾丝花边领",
+    promptLook: "米白色星星印花宠物背心，浅粉色包边，领口一圈白色蕾丝花边"
+  },
+  look3: {
+    name: "小熊毛绒连帽",
+    idx: "look 03",
+    thumb: "assets/looks/look3-thumb.jpg",
+    desc: "呆萌小熊脸做成了口袋，珊瑚绒裹住整个身子。冬天穿上它，谁也别想叫你出门。",
+    key: "驼色珊瑚绒 + 小熊五官拼布 + 黄色脸颊 + 蓝色圆点内衬",
+    promptLook: "驼色毛绒小熊连帽宠物服装，正面有小熊五官拼布和黄色圆形脸颊，内侧蓝色圆点内衬"
+  }
+};
+
+/* ==================== 状态 ==================== */
+const state = {
+  animal: "elephant",
+  look: "look1",
+  custom: null,          // { dataUrl }
+  customResult: null,    // dataUrl
+  generated: {},         // "animal:look" -> src
+  busy: false,
+  compareOn: false,
+  clip: 0
+};
+
+/* 本地后端（server.mjs）是否在线且配好了模型 Key */
+let API_READY = false;
+function probeApi() {
+  // file:// 直接打开时这个请求会失败，就是「没有后端」的正常状态
+  fetch("/api/health", { cache: "no-store" })
+    .then((r) => (r.ok ? r.json() : null))
+    .then((d) => {
+      API_READY = Boolean(d && d.configured);
+      updateUI();
+    })
+    .catch(() => { API_READY = false; });
+}
+
+const $ = (s) => document.querySelector(s);
+const media = $("#media"), afterWrap = $("#afterWrap"), imgBase = $("#imgBase"),
+      imgAfter = $("#imgAfter"), loader = $("#loader"), loaderTxt = $("#loaderTxt"),
+      cmpLine = $("#cmpLine");
+
+/* ==================== 渲染：动物 ==================== */
+function renderAnimals() {
+  const items = Object.entries(ANIMALS).map(([k, a]) => `
+    <button class="animal ${k === state.animal ? "on" : ""}" data-animal="${k}" aria-pressed="${k === state.animal}">
+      <img src="${a.thumb}" alt="${a.name}">
+      ${a.custom ? `<span class="re-up" data-reupload="1">换一张</span>` : ""}
+      <span class="a-name">${a.name}</span>
+      <span class="tick"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5 9 17.5 20 6.5"/></svg></span>
+    </button>`).join("");
+
+  // 还没上传过萌物时，第 4 格留给上传入口；上传后由「我的萌物」占位
+  const upload = ANIMALS.mine ? "" : `
+    <div class="upload up-animal" id="uploadAnimal" role="button" tabindex="0" aria-label="上传你的动物照片">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+      </svg>
+      <span>上传萌物</span>
+      <small>换成你家那只</small>
+    </div>`;
+
+  $("#animalGrid").innerHTML = items + upload;
+}
+
+/* ==================== 渲染：服装 ==================== */
+function renderLooks() {
+  const items = Object.entries(LOOKS).map(([k, l]) => `
+    <button class="look ${k === state.look ? "on" : ""}" data-look="${k}" aria-pressed="${k === state.look}">
+      <div class="l-img"><img src="${l.thumb}" alt="${l.name}"></div>
+      <div class="l-txt">
+        <div class="l-idx">${l.idx}</div>
+        <div class="l-name">${l.name}</div>
+      </div>
+    </button>`).join("");
+
+  const custom = state.custom ? `
+    <button class="look ${state.look === "custom" ? "on" : ""}" data-look="custom" aria-pressed="${state.look === "custom"}">
+      <div class="l-img"><img src="${state.custom.dataUrl}" alt="自制服装"></div>
+      <div class="l-txt">
+        <div class="l-idx">自制</div>
+        <div class="l-name">我的服装</div>
+      </div>
+      <span class="badge">UPLOAD</span>
+    </button>` : `
+    <div class="upload" id="uploadTile" role="button" tabindex="0">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+      </svg>
+      <span>自己上传</span>
+      <small>拖进来也行</small>
+    </div>`;
+
+  $("#lookGrid").innerHTML = items + custom;
+  bindUpload();
+}
+
+/* ==================== 上传 ==================== */
+function bindUpload() {
+  const tile = document.getElementById("uploadTile");
+  if (tile) {
+    tile.addEventListener("click", () => $("#fileLook").click());
+    tile.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") $("#fileLook").click(); });
+    ["dragenter", "dragover"].forEach(ev => tile.addEventListener(ev, e => { e.preventDefault(); tile.classList.add("drag"); }));
+    ["dragleave", "drop"].forEach(ev => tile.addEventListener(ev, e => { e.preventDefault(); tile.classList.remove("drag"); }));
+    tile.addEventListener("drop", e => {
+      const f = e.dataTransfer.files && e.dataTransfer.files[0];
+      if (f && f.type.startsWith("image/")) readFile(f, setCustomLook);
+    });
+  }
+}
+function readFile(file, cb) {
+  const r = new FileReader();
+  r.onload = () => cb(r.result);
+  r.readAsDataURL(file);
+}
+function setCustomLook(dataUrl) {
+  state.custom = { dataUrl };
+  state.look = "custom";
+  renderLooks();
+  updateUI();
+  toast("服装已收下 · 点下方按钮开始换装");
+}
+
+/* ==================== 舞台 ==================== */
+function setAnimalImage(animalKey) {
+  const a = ANIMALS[animalKey];
+  imgBase.src = a.full;
+  media.style.setProperty("--ar", a.ar);
+  $("#chipAnimalTxt").textContent = a.name;
+}
+
+function showResult(src, animate = true) {
+  afterWrap.style.display = "block";
+  imgAfter.src = src;
+  afterWrap.style.transition = "none";
+  state.clip = animate ? 100 : 0;
+  applyClip();
+  if (animate) {
+    requestAnimationFrame(() => {
+      afterWrap.style.transition = "clip-path .9s cubic-bezier(.22,.8,.2,1)";
+      state.clip = 0;
+      applyClip();
+    });
+  }
+  $("#btnCompare").disabled = false;
+  $("#btnSave").disabled = false;
+  document.querySelector(".si-actions").classList.add("active");
+  updateUI();
+}
+
+function clearResult() {
+  afterWrap.style.display = "none";
+  imgAfter.removeAttribute("src");
+  state.clip = 0;
+  setCompare(false);
+  afterWrap.style.transition = "none";
+  applyClip();
+  $("#btnCompare").disabled = true;
+  $("#btnSave").disabled = true;
+  document.querySelector(".si-actions").classList.remove("active");
+}
+
+function applyClip() {
+  afterWrap.style.clipPath = `inset(0 0 0 ${state.clip}%)`;
+  cmpLine.style.left = state.clip + "%";
+}
+
+function setCompare(on, pos = 50) {
+  state.compareOn = on;
+  document.body.classList.toggle("cmp-on", on);
+  media.classList.toggle("compare-on", on);
+  $("#btnCompare").classList.toggle("active", on);
+  if (!on) { state.clip = 0; afterWrap.style.transition = "clip-path .45s ease"; applyClip(); }
+  else { state.clip = pos; afterWrap.style.transition = "clip-path .25s ease"; applyClip(); }
+}
+
+/* ==================== 生成 ==================== */
+const STATUS = ["正在量体裁衣…", "正在对齐肩线…", "正在缝上花纹…", "正在熨平褶皱…", "最后整理一下领口…"];
+
+function generate() {
+  if (state.busy) return;
+
+  const key = `${state.animal}:${state.look}`;
+
+  // 已经有过结果（预设组合，或自建动物回传的图）：直接重现
+  if (state.generated[key]) {
+    state.busy = true;
+    setBusyLook(true);
+    loaderTxt.textContent = "从衣架上取下来…";
+    loader.classList.add("on");
+    setTimeout(() => {
+      loader.classList.remove("on");
+      showResult(state.generated[key], false);
+      state.busy = false;
+      setBusyLook(false);
+      toast("这套已经试过啦 · 拖动可对比前后");
+    }, 620);
+    return;
+  }
+
+  // 自制服装、自建动物都没有预置结果：有后端就现场生成，没有就退回指令模式
+  const a0 = ANIMALS[state.animal];
+  if (state.look === "custom" || (a0 && a0.custom)) {
+    if (API_READY) generateViaApi();
+    else openModal();
+    return;
+  }
+
+  state.busy = true;
+  setBusyLook(true);
+  $("#btnGenerate").disabled = true;
+  loader.classList.add("on");
+
+  let i = 0;
+  loaderTxt.textContent = STATUS[0];
+  const tick = setInterval(() => { i = (i + 1) % STATUS.length; loaderTxt.textContent = STATUS[i]; }, 620);
+
+  const src = `assets/results/${state.animal}-${state.look}.jpg`;
+  const img = new Image();
+
+  const finish = () => {
+    clearInterval(tick);
+    setTimeout(() => {
+      loader.classList.remove("on");
+      state.generated[key] = src;
+      showResult(src, true);
+      state.busy = false;
+      setBusyLook(false);
+      $("#btnGenerate").disabled = false;
+      const a = ANIMALS[state.animal], l = LOOKS[state.look];
+      toast(`${a.name} 穿上了 ${l.idx} · 拖动图片看对比`);
+      if (window.innerWidth <= 1020) {
+        document.getElementById("studio").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }, 900);
+  };
+
+  img.onload = finish;
+  img.onerror = () => {
+    clearInterval(tick);
+    loader.classList.remove("on");
+    state.busy = false;
+    setBusyLook(false);
+    $("#btnGenerate").disabled = false;
+    toast("这张图暂时取不出来，换个组合试试");
+  };
+  img.src = src;
+}
+
+function setBusyLook(b) {
+  $("#btnGenerate").style.opacity = b ? ".7" : "";
+}
+
+/* ==================== 真·生成（本地后端） ==================== */
+const AI_STATUS = ["正在把你的图送去模型…", "正在量肩线…", "正在缝上花纹…", "正在熨平褶皱…", "快好了，再等一会儿…"];
+
+function toDataUrl(src) {
+  if (!src) return Promise.reject(new Error("图片缺失"));
+  if (src.startsWith("data:")) return Promise.resolve(src);
+  return fetch(src)
+    .then((r) => r.blob())
+    .then((b) => new Promise((res, rej) => {
+      const fr = new FileReader();
+      fr.onload = () => res(fr.result);
+      fr.onerror = () => rej(new Error("图片读取失败"));
+      fr.readAsDataURL(b);
+    }));
+}
+
+async function generateViaApi() {
+  if (state.busy) return;
+  const key = `${state.animal}:${state.look}`;
+  const a = ANIMALS[state.animal];
+
+  state.busy = true;
+  setBusyLook(true);
+  $("#btnGenerate").disabled = true;
+  loader.classList.add("on");
+
+  let i = 0;
+  loaderTxt.textContent = AI_STATUS[0];
+  const tick = setInterval(() => { i = (i + 1) % AI_STATUS.length; loaderTxt.textContent = AI_STATUS[i]; }, 2600);
+
+  const stop = () => {
+    clearInterval(tick);
+    loader.classList.remove("on");
+    state.busy = false;
+    setBusyLook(false);
+    $("#btnGenerate").disabled = false;
+  };
+
+  try {
+    const [animalImg, lookImg] = await Promise.all([
+      toDataUrl(a.full),
+      toDataUrl(state.look === "custom" ? state.custom.dataUrl : LOOKS[state.look].thumb),
+    ]);
+
+    // 出图尺寸跟着动物照片的朝向走，避免竖图被塞进方图、对比时接不上
+    const ar = await new Promise((res) => {
+      const im = new Image();
+      im.onload = () => res(im.naturalWidth / im.naturalHeight);
+      im.onerror = () => res(1);
+      im.src = animalImg;
+    });
+    const size = ar < 0.9 ? "1024x1536" : ar > 1.15 ? "1536x1024" : "1024x1024";
+
+    const r = await fetch("/api/dress", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ animal: animalImg, look: lookImg, prompt: buildPrompt(), size }),
+    });
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok || !data.image) throw new Error(data.error || "生成失败");
+
+    stop();
+    state.generated[key] = data.image;
+    showResult(data.image, true);
+    toast("换好了 · 拖动图片看前后对比");
+  } catch (err) {
+    stop();
+    console.error("[dress]", err);
+    toast(`没生成成功：${err.message || "未知错误"}`);
+    // 生成失败时给一条退路：直接看指令，自己去别处生成
+    setTimeout(openModal, 600);
+  }
+}
+
+/* ==================== UI 同步 ==================== */
+function updateUI() {
+  const a = ANIMALS[state.animal];
+  const isCustom = state.look === "custom";
+  const isCustomAnimal = !!a.custom;
+  const l = isCustom ? { idx: "自制服装", name: "我的服装" } : LOOKS[state.look];
+
+  $("#siTitle").textContent = a.name;
+
+  const hasResult = imgAfter.getAttribute("src");
+  $("#siMeta").textContent = hasResult ? `${l.idx} · ${l.name}` : "";
+
+  $("#ctaTxt").textContent = isCustom
+    ? `让「${a.name}」穿上我的服装`
+    : `让「${a.name}」穿上 ${l.idx}`;
+
+  $("#hint").textContent = hasResult
+    ? "拖动图片看前后对比 · 点「保存」存下来"
+    : (isCustom || isCustomAnimal
+        ? (API_READY ? "AI 已接入 · 生成约 20–40 秒" : "这组要现场生成 · 会给你一段现成的指令")
+        : "生成约 2 秒 · 出图后可拖动对比前后");
+
+  $("#animalNote").textContent = `${Object.keys(ANIMALS).length} 位住客`;
+  $("#lookNote").textContent = state.custom ? "衣橱 3 件 + 自制 1 件" : "衣橱 3 件";
+  document.querySelectorAll("[data-animal]").forEach(el =>
+    el.classList.toggle("on", el.dataset.animal === state.animal));
+  document.querySelectorAll("[data-look]").forEach(el =>
+    el.classList.toggle("on", el.dataset.look === state.look));
+}
+
+/* ==================== 事件 ==================== */
+$("#animalGrid").addEventListener("click", (e) => {
+  if (e.target.closest("[data-reupload]") || e.target.closest("#uploadAnimal")) {
+    $("#fileAnimal").click();
+    return;
+  }
+  const btn = e.target.closest("[data-animal]");
+  if (!btn) return;
+  const key = btn.dataset.animal;
+  if (key === state.animal) return;
+  state.animal = key;
+  setAnimalImage(key);
+
+  // 该动物 + 当前服装已有结果就直接呈现
+  const combo = `${key}:${state.look}`;
+  if (state.generated[combo]) {
+    showResult(state.generated[combo], false);
+  } else if (state.look === "custom" && state.customResult) {
+    showResult(state.customResult, false);
+  } else {
+    clearResult();
+  }
+  updateUI();
+  if (window.innerWidth <= 1020) {
+    document.getElementById("studio").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+});
+
+$("#animalGrid").addEventListener("keydown", (e) => {
+  if ((e.key === "Enter" || e.key === " ") && e.target.id === "uploadAnimal") {
+    e.preventDefault();
+    $("#fileAnimal").click();
+  }
+});
+
+/* 上传自己的动物 */
+$("#fileAnimal").addEventListener("change", (e) => {
+  const f = e.target.files && e.target.files[0];
+  if (!f) return;
+  if (!/^image\//.test(f.type)) { toast("请选一张图片文件"); return; }
+
+  readFile(f, (dataUrl) => {
+    const probe = new Image();
+    probe.onload = () => {
+      const w = probe.naturalWidth || 1, h = probe.naturalHeight || 1;
+      // 舞台比例做温和限制，避免超长图把版面撑坏（图片本身仍是 contain，不裁切）
+      const ar = Math.min(1.7, Math.max(0.6, w / h));
+
+      ANIMALS.mine = {
+        name: "我的萌物",
+        species: "你上传的",
+        tag: "Yours",
+        desc: "",
+        traits: [],
+        promptName: "照片里这只宠物",
+        thumb: dataUrl,
+        full: dataUrl,
+        ar: `${Math.round(ar * 1000)} / 1000`,
+        custom: true
+      };
+
+      Object.keys(state.generated).forEach((k) => { if (k.startsWith("mine:")) delete state.generated[k]; });
+      state.animal = "mine";
+      renderAnimals();
+      setAnimalImage("mine");
+      clearResult();
+      updateUI();
+      toast("换上了你的萌物 · 再挑件衣服");
+      if (window.innerWidth <= 1020) {
+        document.getElementById("studio").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    };
+    probe.onerror = () => toast("这张图读不出来，换一张试试");
+    probe.src = dataUrl;
+  });
+
+  e.target.value = "";
+});
+
+$("#lookGrid").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-look]");
+  if (!btn) return;
+  state.look = btn.dataset.look;
+  clearResult();
+  updateUI();
+});
+
+$("#btnGenerate").addEventListener("click", generate);
+
+$("#btnCompare").addEventListener("click", () => {
+  if (!imgAfter.getAttribute("src")) return;
+  setCompare(!state.compareOn, state.compareOn ? 0 : 50);
+});
+
+$("#btnSave").addEventListener("click", () => {
+  const src = imgAfter.getAttribute("src");
+  if (!src) return;
+  if (!src.startsWith("data:")) {
+    const a = document.createElement("a");
+    a.href = src;
+    a.download = `${ANIMALS[state.animal].name}-${state.look}.jpg`;
+    a.click();
+    toast("已开始下载");
+  } else {
+    const a = document.createElement("a");
+    a.href = src;
+    a.download = "给我试试吧-换装.jpg";
+    a.click();
+    toast("已开始下载");
+  }
+});
+
+/* 拖动对比 */
+let dragging = false;
+function posFromEvent(e) {
+  const r = media.getBoundingClientRect();
+  const x = ((e.clientX - r.left) / r.width) * 100;
+  return Math.max(0, Math.min(100, x));
+}
+media.addEventListener("pointerdown", (e) => {
+  if (!imgAfter.getAttribute("src") || state.busy) return;
+  dragging = true;
+  setCompare(true, posFromEvent(e));
+  media.setPointerCapture(e.pointerId);
+});
+media.addEventListener("pointermove", (e) => {
+  if (!dragging) return;
+  state.clip = posFromEvent(e);
+  afterWrap.style.transition = "none";
+  applyClip();
+});
+media.addEventListener("pointerup", (e) => {
+  dragging = false;
+  try { media.releasePointerCapture(e.pointerId); } catch (_) {}
+  if (state.clip <= 2) setCompare(false);
+});
+
+/* 键盘也能调对比：聚焦舞台后按 ← → */
+media.addEventListener("keydown", (e) => {
+  if (!imgAfter.getAttribute("src") || state.busy) return;
+  if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+  e.preventDefault();
+  if (!state.compareOn) setCompare(true, state.clip || 50);
+  state.clip = Math.max(0, Math.min(100, state.clip + (e.key === "ArrowRight" ? 4 : -4)));
+  afterWrap.style.transition = "clip-path .18s ease";
+  applyClip();
+  if (state.clip <= 2) setCompare(false);
+});
+
+/* ==================== 弹窗 ==================== */
+function buildPrompt() {
+  const a = ANIMALS[state.animal];
+  const detail = state.look === "custom"
+    ? "按第 2 张图完全还原服装的颜色、图案、领口造型和版型"
+    : `严格还原这套服装的细节：${LOOKS[state.look].key}`;
+  return `把第 2 张图里的服装穿到第 1 张图的「${a.promptName}」身上，生成一张写实的宠物换装照片。
+
+要求：
+1. 服装贴合它的身体结构和体型，肩线、领口位置合理，前腿从袖口自然穿出，不遮挡五官；
+2. ${detail}，保留真实面料的褶皱与光泽质感；
+3. 它的品种、毛色、五官、神态、姿态、光线和背景，完全保持第 1 张图的样子不要改动；
+4. 真实摄影质感，光影统一，不要插画或卡通风格，画面里不要出现任何文字或水印。`;
+}
+
+function openModal() {
+  const a = ANIMALS[state.animal];
+  const aCustom = !!a.custom;
+  const lCustom = state.look === "custom";
+
+  if (aCustom && lCustom) {
+    $("#mTitle").textContent = "两张都是你自己的图";
+    $("#mSub").textContent = "萌物和服装都是你上传的，这组得现场生成。把下面两张图和指令一起交给 WorkBuddy（或任意支持图片编辑的 AI），拿到结果再传回来。";
+  } else if (aCustom) {
+    $("#mTitle").textContent = "给这位新住客量个身";
+    $("#mSub").textContent = "你上传的萌物还没有换装结果。这段指令已经把它的体型和这套衣服的细节都写好了——带上下面两张图，交给 WorkBuddy（或任意支持图片编辑的 AI），就能拿到真实效果。";
+  } else {
+    $("#mTitle").textContent = "这套衣服，得现场缝一针";
+    $("#mSub").textContent = "你上传的服装还没有换装结果。这里已经替你写好了一段生成指令——把它和下面两张图一起交给 WorkBuddy（或任意支持图片编辑的 AI），就能拿到真实效果。";
+  }
+
+  $("#mAnimal").src = a.full;
+  $("#mLook").src = lCustom ? state.custom.dataUrl : LOOKS[state.look].thumb;
+  $("#mPrompt").value = buildPrompt();
+
+  $("#mFoot").innerHTML = API_READY
+    ? "生成失败了可以再点一次按钮重试；也可以自己拿去别处生成，回来点「我有结果了」。"
+    : "拿到效果图后，点「我有结果了」把它传进来，就能在舞台上看前后对比。<br>想在网页里直接出图：在项目目录运行 <code>node server.mjs</code>，按 <code>.env.example</code> 填好模型 Key，刷新页面即可。";
+
+  $("#modal").classList.add("on");
+}
+function closeModal() { $("#modal").classList.remove("on"); }
+
+$("#modal").addEventListener("click", (e) => { if (e.target.id === "modal") closeModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+
+$("#btnCopy").addEventListener("click", async () => {
+  const text = $("#mPrompt").value;
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("指令已复制 · 去交给 AI 吧");
+  } catch (_) {
+    const ta = $("#mPrompt");
+    ta.select();
+    document.execCommand("copy");
+    toast("指令已复制");
+  }
+});
+
+$("#btnHaveResult").addEventListener("click", () => $("#fileResult").click());
+$("#fileResult").addEventListener("change", (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  readFile(f, (url) => {
+    state.customResult = url;
+    const a = ANIMALS[state.animal];
+    if (a && a.custom) state.generated[`${state.animal}:${state.look}`] = url;
+    closeModal();
+    showResult(url, true);
+    toast("结果已放上舞台 · 拖一拖看对比");
+  });
+  e.target.value = "";
+});
+
+$("#fileLook").addEventListener("change", (e) => {
+  const f = e.target.files[0];
+  if (!f) return;
+  readFile(f, setCustomLook);
+});
+
+/* ==================== Toast ==================== */
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast");
+  t.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" style="opacity:.8"><path d="M4 12.5 9 17.5 20 6.5"/></svg><span>${msg}</span>`;
+  t.classList.add("on");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("on"), 2600);
+}
+
+/* ==================== 滚动细节 ==================== */
+window.addEventListener("scroll", () => {
+  document.getElementById("nav").classList.toggle("solid", window.scrollY > 12);
+}, { passive: true });
+
+/* ==================== 初始化 ==================== */
+function preload() {
+  Object.values(ANIMALS).forEach(a => { const i = new Image(); i.src = a.full; });
+  Object.keys(ANIMALS).forEach(a => Object.keys(LOOKS).forEach(l => {
+    const i = new Image(); i.src = `assets/results/${a}-${l}.jpg`;
+  }));
+}
+
+renderAnimals();
+renderLooks();
+setAnimalImage(state.animal);
+clearResult();
+updateUI();
+preload();
+probeApi();
+</script>
+</body>
+</html>
